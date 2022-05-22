@@ -4,7 +4,7 @@ import React from "react";
 
 const data = [
     {
-        key: '1',
+        key: '4',
         name: 'John Brown',
         address: 'New York No. 1 Lake Park',
         tags: ['nice', 'developer'],
@@ -22,7 +22,7 @@ const data = [
         tags: ['cool', 'teacher'],
     },
     {
-        key: '888',
+        key: '1',
         name: '000027365124.jpg',
         address: 'https://miro.medium.com/max/356/1*EnF9uIN_u2_X7ey24lB7Tg.png',
         tags: ['human', 'gun'],
