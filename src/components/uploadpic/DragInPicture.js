@@ -1,6 +1,7 @@
 import React from 'react';
 import { Upload, message,Button } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import axios from "axios";
 
 const { Dragger } = Upload;
 
@@ -11,6 +12,7 @@ export default class DragInPicture extends React.Component{
     };
 
     handleUpload = () => {
+        let base64image = "";
         const { fileList } = this.state;
         const formData = new FormData();
         const reader = new FileReader();
@@ -18,34 +20,57 @@ export default class DragInPicture extends React.Component{
             formData.append('files[]', file);
             reader.readAsDataURL(file);
         });
-        reader.onload = function (e) {
-            console.log(e.target.result);
-        }
 
         this.setState({
             uploading: true,
         });
 
-        // You can use any AJAX library you like
-        fetch('https://www.mocky.io/v2/5cc8019d300000980a055e76', {
-            method: 'POST',
-            body: formData,
-        })
-            .then(res => res.json())
-            .then(() => {
+        const promise = new Promise(function (resolve, reject) {
+            reader.onload = function (e) {
+                base64image = e.target.result.split("base64,")[1];
+                console.log("read finish");
+                resolve();
+            }
+        }).then(() => {
+            console.log("start post");
+            axios.post("https://7rdolkd2q3.execute-api.us-east-1.amazonaws.com/dev/",
+                {"id":"hello",
+                    "image":base64image,
+                }).then(res=>{
+                console.log(res)
+            }).then(()=>{
                 this.setState({
-                    fileList: [],
+                    fileList: []
                 });
-                message.success('upload successfully.');
-            })
-            .catch(() => {
-                message.error('upload failed.');
-            })
-            .finally(() => {
+                message.success("upload successfully.")
+            }).catch(()=>{
+                message.error("upload failed.")
+            }).finally(()=>{
                 this.setState({
                     uploading: false,
                 });
-            });
+            })
+        })
+        // You can use any AJAX library you like
+        // fetch('/dev/', {
+        //     method: 'POST',
+        //     body: {"image":base64image,"id":"hello"}
+        // })
+        //     .then(res => res.json())
+        //     .then(() => {
+        //         this.setState({
+        //             fileList: [],
+        //         });
+        //         message.success('upload successfully.');
+        //     })
+        //     .catch(() => {
+        //         message.error('upload failed.');
+        //     })
+        //     .finally(() => {
+        //         this.setState({
+        //             uploading: false,
+        //         });
+        //     });
     };
 
     render() {
