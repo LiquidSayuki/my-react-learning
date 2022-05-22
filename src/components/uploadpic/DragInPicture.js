@@ -38,6 +38,7 @@ export default class DragInPicture extends React.Component{
                     "image":base64image,
                 }).then(res=>{
                 console.log(res)
+                this.props.success(res);
             }).then(()=>{
                 this.setState({
                     fileList: []
@@ -49,8 +50,10 @@ export default class DragInPicture extends React.Component{
                 this.setState({
                     uploading: false,
                 });
+
             })
         })
+
         // You can use any AJAX library you like
         // fetch('/dev/', {
         //     method: 'POST',
