@@ -28,24 +28,26 @@ export default class DragInPicture extends React.Component{
         const promise = new Promise(function (resolve, reject) {
             reader.onload = function (e) {
                 base64image = e.target.result.split("base64,")[1];
-                console.log("read finish");
+                console.log(base64image);
                 resolve();
             }
         }).then(() => {
             console.log("start post");
+            //https://7rdolkd2q3.execute-api.us-east-1.amazonaws.com/dev/
+            //http://127.0.0.1:5000/mock/detect
             axios.post("https://7rdolkd2q3.execute-api.us-east-1.amazonaws.com/dev/",
                 {"id":"hello",
                     "image":base64image,
                 }).then(res=>{
                 console.log(res)
-                this.props.success(res);
+                this.props.callback(res,base64image);
             }).then(()=>{
                 this.setState({
                     fileList: []
                 });
-                message.success("upload successfully.")
+                message.success("detect successfully.")
             }).catch(()=>{
-                message.error("upload failed.")
+                message.error("detect failed.")
             }).finally(()=>{
                 this.setState({
                     uploading: false,
